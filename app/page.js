@@ -393,7 +393,10 @@ const CannonSimulator = () => {
    * Initiates projectile animation
    */
   const fireProjectile = () => {
+    // close the popup in mobile
+    setShowPanel(false);
     if (isFiring || !projectileRef.current) return;
+
     setIsFiring(true);
     projectileRef.current.visible = true;
     const angleRad = (cannonAngle * Math.PI) / 180;
