@@ -479,25 +479,14 @@ const CannonSimulator = () => {
    */
   return (
     <div className="w-full min-h-screen bg-gray-900 text-white flex flex-col">
-      {/* Header */}
-      <header className="bg-gray-800 p-3 sm:p-4 shadow-md text-center">
-        <h1 className="text-lg sm:text-2xl font-bold">
-          Projectile Motion Simulator
-        </h1>
-        <p className="text-gray-400 text-xs sm:text-sm mt-1">
-          Drag to rotate • Scroll to zoom
-        </p>
-      </header>
-
       {/* Main Content */}
       <main className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         {/* 3D Canvas */}
-        <div className="relative flex-1 h-[50vh] sm:h-[60vh] lg:h-auto">
+        <div className="relative flex-1 h-[100dvh] sm:h-[60vh] lg:h-auto">
           <canvas
             ref={canvasRef}
             className="w-full h-full cursor-grab active:cursor-grabbing touch-none"
           />
-
           {/* Camera Mode Buttons */}
           <div className="absolute top-2 left-2 sm:top-4 sm:left-4 flex flex-wrap gap-1 sm:gap-2 max-w-xs">
             {["overview", "follow", "side", "closeup"].map((mode) => (
