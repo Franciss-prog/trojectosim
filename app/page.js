@@ -23,6 +23,8 @@ const CannonSimulator = () => {
   const [initialVelocity, setInitialVelocity] = useState(20); // m/s
   const [isFiring, setIsFiring] = useState(false);
   const [cameraMode, setCameraMode] = useState("overview"); // 'overview', 'follow', 'side'
+  const [showPanel, setShowPanel] = useState(false);
+
   const [projectileData, setProjectileData] = useState({
     range: 0,
     maxHeight: 0,
@@ -430,6 +432,7 @@ const CannonSimulator = () => {
         projectileStateRef.current.active = false;
         projectileRef.current.visible = false;
         setIsFiring(false);
+        setShowPanel(true);
         return;
       }
       const worldX = startX + pos.x;
@@ -473,7 +476,6 @@ const CannonSimulator = () => {
   /**
    * SECTION 7: TOGGLE SIDE PANEL (Mobile)
    */
-  const [showPanel, setShowPanel] = useState(false);
   /**
    * SECTION 8: UI RENDERING - FULLY RESPONSIVE
    */
@@ -482,7 +484,7 @@ const CannonSimulator = () => {
       {/* Main Content */}
       <main className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         {/* 3D Canvas */}
-        <div className="relative flex-1 h-[100dvh] sm:h-[60vh] lg:h-auto">
+        <div className="relative flex-1  max-sm:h-[50vh] max-lg:h-auto max-md:flex max-md:jsutify-center max-md:items-center">
           <canvas
             ref={canvasRef}
             className="w-full h-full cursor-grab active:cursor-grabbing touch-none"
@@ -514,25 +516,6 @@ const CannonSimulator = () => {
             </div>
           )}
 
-          {/* Instructions (hidden on small screens) */}
-          <div className="hidden sm:block absolute bottom-4 left-4 bg-black/70 px-4 py-3 rounded max-w-xs">
-            <h3 className="font-bold mb-2">Controls</h3>
-            <div className="text-xs space-y-1 text-gray-300">
-              <p>
-                • <strong>Drag</strong> - Rotate
-              </p>
-              <p>
-                • <strong>Scroll</strong> - Zoom
-              </p>
-              <p>
-                • <strong>Spacebar</strong> - Fire
-              </p>
-              <p>
-                • <strong>Arrows</strong> - Adjust angle
-              </p>
-            </div>
-          </div>
-
           {/* Mobile Controls Button */}
           <button
             onClick={() => setShowPanel(!showPanel)}
@@ -555,9 +538,7 @@ const CannonSimulator = () => {
           >
             ✕
           </button>
-
           <h2 className="text-lg sm:text-xl font-bold mb-4">Physics Data</h2>
-
           {/* Cannon Parameters */}
           <div className="bg-gray-700 p-3 sm:p-4 rounded mb-4">
             <h3 className="font-semibold mb-3 text-blue-400 text-sm sm:text-base">
@@ -599,7 +580,6 @@ const CannonSimulator = () => {
               />
             </div>
           </div>
-
           {/* Fire Button */}
           <button
             onClick={fireProjectile}
@@ -612,7 +592,6 @@ const CannonSimulator = () => {
           >
             {isFiring ? "Firing..." : "🔥 FIRE CANNON"}
           </button>
-
           {/* Calculated Values */}
           <div className="bg-gray-700 p-3 sm:p-4 rounded mb-4">
             <h3 className="font-semibold mb-3 text-green-400 text-sm sm:text-base">
@@ -658,18 +637,29 @@ const CannonSimulator = () => {
               )}
             </div>
           </div>
-
           {/* Physics Formulas */}
           <div className="bg-gray-700 p-3 sm:p-4 rounded text-xs font-mono text-gray-300 space-y-1 sm:space-y-2">
             <h3 className="font-semibold text-purple-400 text-sm sm:text-base mb-2">
               Equations
             </h3>
-            <p>x(t) = v₀·cos(θ)·t</p>
-            <p>y(t) = y₀ + v₀·sin(θ)·t - ½gt²</p>
-            <p>Range = v₀·cos(θ)·t_flight</p>
-            <p>Max H = y₀ + v₀²·sin²(θ)/2g</p>
+            <div className="space-y-1">
+              <span>Horizontal Displacement:</span>
+              <ul className="list-disc list-inside space-y-1">
+                <li>vₓ = v₀ cos θ (constant throughout flight)</li>
+                <li>x = vₓ t = (v₀ cos θ) t</li>
+                <li>R = (v₀² sin 2θ) / g (maximum range)</li>
+              </ul>
+            </div>
+            <div className="space-y-1">
+              <span>Vertical Displacement:</span>
+              <ul className="list-disc list-inside space-y-1">
+                <li>v_y = v₀ sin θ - g t (final vertical velocity)</li>
+                <li>y = (v₀ sin θ) t - (1/2) g t²</li>
+                <li>H = (v₀² sin² θ) / (2 g) (maximum height)</li>
+              </ul>
+            </div>
             <p className="text-gray-500 mt-2">g = {GRAVITY} m/s²</p>
-          </div>
+          </div>{" "}
         </aside>
       </main>
 
