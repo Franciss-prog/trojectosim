@@ -19,8 +19,8 @@ import * as THREE from "three";
  */
 const CannonSimulator = () => {
   // State management for physics and controls
-  const [cannonAngle, setCannonAngle] = useState(45); // degrees
-  const [initialVelocity, setInitialVelocity] = useState(20); // m/s
+  const [cannonAngle, setCannonAngle] = useState(45.0); // degrees
+  const [initialVelocity, setInitialVelocity] = useState(20.0); // m/s
   const [isFiring, setIsFiring] = useState(false);
   const [cameraMode, setCameraMode] = useState("overview"); // 'overview', 'follow', 'side'
   const [showPanel, setShowPanel] = useState(false);
@@ -544,42 +544,79 @@ const CannonSimulator = () => {
             <h3 className="font-semibold mb-3 text-blue-400 text-sm sm:text-base">
               Cannon Parameters
             </h3>
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm sm:text-base">
-                <span className="text-gray-300">Angle:</span>
-                <span className="font-mono">{cannonAngle.toFixed(1)}°</span>
-              </div>
-              <div className="w-full bg-gray-600 rounded h-2">
-                <div
-                  className="bg-blue-500 h-2 rounded transition-all"
-                  style={{ width: `${(cannonAngle / 90) * 100}%` }}
+            <div className="space-y-4">
+              <div>
+                <div className="flex justify-between text-sm sm:text-base mb-2">
+                  <span className="text-gray-300">Angle:</span>
+                  <span className="font-mono">{cannonAngle.toFixed(1)}°</span>
+                </div>
+                <div className="w-full bg-gray-600 rounded h-2 mb-2">
+                  <div
+                    className="bg-blue-500 h-2 rounded transition-all"
+                    style={{ width: `${(cannonAngle / 90) * 100}%` }}
+                  />
+                </div>
+                <input
+                  type="range"
+                  min="15"
+                  max="90"
+                  step="0.1"
+                  value={cannonAngle}
+                  onChange={(e) => setCannonAngle(Number(e.target.value))}
+                  className="w-full"
+                  disabled={isFiring}
+                />
+                <input
+                  type="number"
+                  min="15"
+                  max="90"
+                  step="0.1"
+                  value={cannonAngle}
+                  onChange={(e) => {
+                    const val = Number(e.target.value);
+                    if (!isNaN(val) && val >= 15 && val <= 90) {
+                      setCannonAngle(val);
+                    }
+                  }}
+                  className="w-full mt-1 p-1 bg-gray-600 border border-gray-500 rounded text-sm text-white focus:outline-none focus:border-blue-500"
+                  disabled={isFiring}
+                  placeholder="e.g., 25.1"
                 />
               </div>
-              <input
-                type="range"
-                min="15"
-                max="90"
-                value={cannonAngle}
-                onChange={(e) => setCannonAngle(Number(e.target.value))}
-                className="w-full"
-                disabled={isFiring}
-              />
-
-              <div className="flex justify-between mt-3 text-sm sm:text-base">
-                <span className="text-gray-300">Velocity:</span>
-                <span className="font-mono">{initialVelocity} m/s</span>
+              <div>
+                <div className="flex justify-between text-sm sm:text-base mb-2">
+                  <span className="text-gray-300">Velocity:</span>
+                  <span className="font-mono">{initialVelocity} m/s</span>
+                </div>
+                <input
+                  type="range"
+                  min="10"
+                  max="100"
+                  step="0.1"
+                  value={initialVelocity}
+                  onChange={(e) => setInitialVelocity(Number(e.target.value))}
+                  className="w-full"
+                  disabled={isFiring}
+                />
+                <input
+                  type="number"
+                  min="10"
+                  max="100"
+                  step="0.1"
+                  value={initialVelocity}
+                  onChange={(e) => {
+                    const val = Number(e.target.value);
+                    if (!isNaN(val) && val >= 10 && val <= 100) {
+                      setInitialVelocity(val);
+                    }
+                  }}
+                  className="w-full mt-1 p-1 bg-gray-600 border border-gray-500 rounded text-sm text-white focus:outline-none focus:border-blue-500"
+                  disabled={isFiring}
+                  placeholder="e.g., 80.1"
+                />
               </div>
-              <input
-                type="range"
-                min="10"
-                max="40"
-                value={initialVelocity}
-                onChange={(e) => setInitialVelocity(Number(e.target.value))}
-                className="w-full"
-                disabled={isFiring}
-              />
             </div>
-          </div>
+          </div>{" "}
           {/* Fire Button */}
           <button
             onClick={fireProjectile}
